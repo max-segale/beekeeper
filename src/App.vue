@@ -18,24 +18,24 @@ footer
   span Built by #[a(href='https://maxsegale.com/' target='_blank' rel='noopener') Max Segale]
 </template>
 
-<script setup>
-// This starter template is using Vue 3 experimental <script setup> SFCs
-// Check out https://github.com/vuejs/rfcs/blob/script-setup-2/active-rfcs/0000-script-setup.md
-
-import { reactive } from 'vue'
-
+<script>
 import Counter from './components/Counter.vue'
 import Face from './components/Face.vue'
 import Timer from './components/Timer.vue'
 import Board from  './components/Board.vue'
-
-const numRows = 16
-const numCols = 16
-const numKills = 40
-
-const state = reactive({
-  status: null
-})
+export default {
+  components: {
+    Counter, Face, Timer, Board
+  },
+  setup() {
+    const numRows = 16
+    const numCols = 16
+    const numKills = 40
+    return {
+      numRows, numCols, numKills
+    }
+  }
+}
 </script>
 
 <style>

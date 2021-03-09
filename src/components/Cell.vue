@@ -22,18 +22,23 @@ export default {
     }
   },
   methods: {
+    uncover() {
+      this.className = 'uncovered'
+      this.displayVal = this.display
+    },
     handleClick() {
       if (this.className !== 'flagged') {
         if (this.isKill) {
           this.className = 'dead'
+          this.displayVal = this.display
           //this.$emit('killCell', [this.row, this.cell])
         } else {
-          this.className = 'uncovered'
+          this.uncover()
           if (this.display === '') {
-            //this.$emit('emptyCell', [this.row, this.cell])
+            this.$emit('uncoverEmpty', [this.row, this.cell])
           }
         }
-        this.displayVal = this.display
+        
       }
     },
     handleRightClick(event) {
@@ -46,7 +51,6 @@ export default {
           this.displayVal = '🚩'
         }
       }
-      //event.preventDefault()
     }
   }
 }
