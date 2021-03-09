@@ -1,16 +1,19 @@
 <template lang="pug">
 .counter
-  span {{props.total}} 
+  span {{total}} 🐝
 </template>
 
-<script setup>
-const props = defineProps({
-  total: Number
-})
+<script>
+export default {
+  props: {
+    total: Number
+  }
+}
 </script>
 
 <style scoped>
 .counter {
-
+  flex: 1 0 0;
+  text-align: left;
 }
 </style>

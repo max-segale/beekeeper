@@ -1,17 +1,17 @@
 <template lang="pug">
 .board
   .row(v-for='(rowArr, rowNum) in cellMatrix')
-    cell(v-for='(cellObj, cellNum) in rowArr'
+    Cell(v-for='(cellObj, cellNum) in rowArr'
       :row='rowNum'
       :cell='cellNum'
       :is-kill='cellObj.bool'
       :display='cellObj.string'
+      @empty-cell='clearSurround($event)'
     )
 </template>
 
 <script setup>
-
-import { defineProps, reactive } from 'vue'
+import { defineProps } from 'vue'
 import Cell from './Cell.vue'
 
 const props = defineProps({
@@ -24,7 +24,14 @@ const cellVals = {
   bool: false,
   string: ''
 }
+
 const cellMatrix = Array(props.numCols).fill(Array(props.numRows).fill(cellVals))
+
+function clearSurround(coords) {
+  const rowNum = coords[0]
+  const cellNum = coords[1]
+  console.log(rowNum, cellNum)
+}
 
 function rndNum(max) {
   return Math.floor(Math.random() * max)
@@ -86,28 +93,22 @@ function addNums() {
 }
 
 addKills()
-
 addNums()
-
 </script>
 
 <style scoped>
-
 .board {
+  margin: 0 auto;
   display: flex;
   flex-flow: column nowrap;
   align-items: stretch;
   width: 600px;
   height: 600px;
-  border: 1px solid rgba(0, 0, 0, 0.5);
-  background: red;
 }
-
 .row {
   flex: 1 0 0;
   display: flex;
   flex-flow: row nowrap;
   align-items: stretch;
 }
-
 </style>

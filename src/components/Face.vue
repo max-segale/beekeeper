@@ -1,12 +1,21 @@
 <template lang="pug">
 .face
-  span 🙂
+  span {{face}}
 </template>
 
-<script setup>
-
+<script>
+export default {
+  data() {
+    return {
+      face: '🙂'
+    }
+  }
+}
 </script>
 
 <style scoped>
-
+.face {
+  flex: 0 0 0;
+  font-size: 2em;
+}
 </style>
