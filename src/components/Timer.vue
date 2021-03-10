@@ -1,19 +1,29 @@
 <template lang="pug">
 .timer
-  span {{time}}
+  span {{ currentTime }}
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      time: 0
+  props: {
+    status: String
+  },
+  computed: {
+    currentTime() {
+      if (this.status === 'STARTED' && !this.started) {
+        this.started = true
+        setInterval(() => {
+          this.time += 1
+        }, 1000)
+      }
+      return this.time
     }
   },
-  mounted() {
-    setInterval(() => {
-      this.time += 1
-    }, 1000)
+  data() {
+    return {
+      started: false,
+      time: 0
+    }
   }
 }
 </script>

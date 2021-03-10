@@ -1,7 +1,8 @@
 <template lang="pug">
-.cell
+.cell(
+  :class='className'
+)
   button(
-    :class='className'
     @click='handleClick'
     @contextmenu.prevent='handleRightClick'
   ) {{displayVal}}
@@ -13,7 +14,8 @@ export default {
     row: Number,
     cell: Number,
     isKill: Boolean,
-    display: String
+    display: String,
+    gameStatus: String
   },
   data() {
     return {
@@ -36,6 +38,9 @@ export default {
           this.uncover()
           if (this.display === '') {
             this.$emit('uncoverEmpty', [this.row, this.cell])
+          }
+          if (this.gameStatus) {
+            this.$emit('gameStarted')
           }
         }
         
@@ -62,12 +67,13 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #FFFFFF;
+  border: 1px solid rgb(255, 255, 255);
   overflow: hidden;
 }
 button {
   width: 100%;
   height: 100%;
+  background: transparent;
 }
 .covered {
   background: rgba(175, 175, 175);

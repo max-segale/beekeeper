@@ -6,13 +6,19 @@ header
   Counter(
     :total='numKills'
   )
-  Face
-  Timer
+  Face(
+    :status='gameStatus'
+  )
+  Timer(
+    :status='gameStatus'
+  )
 .game
   Board(
+    :status='gameStatus'
     :num-rows='numRows',
     :num-cols='numCols',
-    :num-kill='numKills'
+    :num-kill='numKills',
+    @gameStarted='updateStatus("STARTED")'
   )
 footer
   span Built by #[a(href='https://maxsegale.com/' target='_blank' rel='noopener') Max Segale]
@@ -26,6 +32,17 @@ import Board from  './components/Board.vue'
 export default {
   components: {
     Counter, Face, Timer, Board
+  },
+  methods: {
+    updateStatus(newStatus) {
+      this.gameStatus = newStatus
+    }
+  },
+  data() {
+    let gameStatus = 'READY'
+    return {
+      gameStatus
+    }
   },
   setup() {
     const numRows = 16

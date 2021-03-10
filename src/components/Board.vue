@@ -10,7 +10,9 @@
       :cell='cellNum'
       :is-kill='cellObj.bool'
       :display='cellObj.string'
+      :game-status='status'
       @uncoverEmpty='clearSurround($event)'
+      @gameStarted='updateStatus'
     )
 </template>
 
@@ -22,9 +24,16 @@ export default {
     Cell
   },
   props: {
+    status: String,
     numRows: Number,
     numCols: Number,
     numKill: Number
+  },
+  data(props) {
+    let gameStatus = props.status
+    return {
+      gameStatus
+    }
   },
   setup(props) {
 
@@ -124,6 +133,10 @@ export default {
           }
         }
       })
+    },
+    updateStatus() {
+      this.gameStatus = 'STARTED'
+      this.$emit('gameStarted')
     }
   }
 }
