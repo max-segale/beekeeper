@@ -1,8 +1,10 @@
 <template lang="pug">
 .cell(
-  :class='className'
+  :class='gameStatus === "OVER" ? "disabled" : null'
 )
   button(
+    :class='className'
+    :disabled='gameStatus === "OVER" ? true : false'
     @click='handleClick'
     @contextmenu.prevent='handleRightClick'
   ) {{displayVal}}
@@ -17,12 +19,6 @@ export default {
     display: String,
     gameStatus: String
   },
-  data() {
-    return {
-      className: 'covered',
-      displayVal: ''
-    }
-  },
   methods: {
     uncover() {
       this.className = 'uncovered'
@@ -33,7 +29,7 @@ export default {
         if (this.isKill) {
           this.className = 'dead'
           this.displayVal = this.display
-          //this.$emit('killCell', [this.row, this.cell])
+          this.$emit('gameOver')
         } else {
           this.uncover()
           if (this.display === '') {
@@ -51,11 +47,19 @@ export default {
         if (this.className === 'flagged') {
           this.className = 'covered'
           this.displayVal = ''
+          this.$emit('flagCount', -1)
         } else {
           this.className = 'flagged'
           this.displayVal = '🚩'
+          this.$emit('flagCount', 1)
         }
       }
+    }
+  },
+  data() {
+    return {
+      className: 'covered',
+      displayVal: ''
     }
   }
 }
@@ -70,10 +74,20 @@ export default {
   border: 1px solid rgb(255, 255, 255);
   overflow: hidden;
 }
+.cell.disabled button.covered:hover {
+  background: rgba(175, 175, 175);
+}
 button {
   width: 100%;
   height: 100%;
+  color: rgb(0, 0, 0);
   background: transparent;
+}
+.button:disabled {
+  color: unset;
+}
+.button:disabled:hover {
+  background: unset;
 }
 .covered {
   background: rgba(175, 175, 175);

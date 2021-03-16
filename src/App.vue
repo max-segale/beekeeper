@@ -4,10 +4,11 @@ header
   h2 It's Minesweeper, but with bees
 .bar
   Counter(
-    :total='numKills'
+    :total='killsLeft'
   )
   Face(
     :status='gameStatus'
+    @game-reset='resetGame'
   )
   Timer(
     :status='gameStatus'
@@ -18,7 +19,8 @@ header
     :num-rows='numRows',
     :num-cols='numCols',
     :num-kill='numKills',
-    @gameStarted='updateStatus("STARTED")'
+    @updateStatus='updateStatus($event)'
+    @updateCount='updateCount($event)'
   )
 footer
   span Built by #[a(href='https://maxsegale.com/' target='_blank' rel='noopener') Max Segale]
@@ -36,20 +38,21 @@ export default {
   methods: {
     updateStatus(newStatus) {
       this.gameStatus = newStatus
+    },
+    updateCount(amount) {
+      this.killsLeft += amount;
+    },
+    resetGame() {
+      location.reload()
     }
   },
   data() {
-    let gameStatus = 'READY'
     return {
-      gameStatus
-    }
-  },
-  setup() {
-    const numRows = 16
-    const numCols = 16
-    const numKills = 40
-    return {
-      numRows, numCols, numKills
+      numRows: 16,
+      numCols: 16,
+      numKills: 40,
+      killsLeft: 40,
+      gameStatus: 'READY'
     }
   }
 }

@@ -1,6 +1,6 @@
 <template lang="pug">
 .timer
-  span {{ currentTime }}
+  span ⏱ {{ currentTime }}
 </template>
 
 <script>
@@ -8,21 +8,34 @@ export default {
   props: {
     status: String
   },
+  methods: {
+    secsToMins(secs) {
+      const minutes = Math.floor(secs % 3600 / 60);
+      const seconds = Math.floor(secs % 3600 % 60);
+      return this.twoDigit(minutes) + ':' + this.twoDigit(seconds)
+    },
+    twoDigit(number) {
+      return (number < 10 ? '0' : '') + number
+    }
+  },
   computed: {
     currentTime() {
       if (this.status === 'STARTED' && !this.started) {
         this.started = true
-        setInterval(() => {
-          this.time += 1
+        this.secondsTick = setInterval(() => {
+          this.seconds += 1
         }, 1000)
+      } else if (this.status === 'OVER') {
+        clearInterval(this.secondsTick)
       }
-      return this.time
+      return this.secsToMins(this.seconds)
     }
   },
   data() {
     return {
       started: false,
-      time: 0
+      seconds: 0,
+      secondsTick: null
     }
   }
 }

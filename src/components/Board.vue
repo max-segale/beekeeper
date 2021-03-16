@@ -12,7 +12,9 @@
       :display='cellObj.string'
       :game-status='status'
       @uncoverEmpty='clearSurround($event)'
-      @gameStarted='updateStatus'
+      @flagCount='flagUpdate($event)'
+      @gameStarted='updateStatus("STARTED")'
+      @gameOver='updateStatus("OVER")'
     )
 </template>
 
@@ -29,11 +31,33 @@ export default {
     numCols: Number,
     numKill: Number
   },
-  data(props) {
-    let gameStatus = props.status
-    return {
-      gameStatus
+  methods: {
+    clearSurround(coords) {
+      const rowNum = coords[0]
+      const cellNum = coords[1]
+      const surrCells = this.getSurroundCells(rowNum, cellNum)
+      surrCells.forEach((coors) => {
+        const rowNum = coors[0]
+        const cellNum = coors[1]
+        const thisCell = this.cells[rowNum + '-' + cellNum]
+        if (thisCell.className === 'covered') {
+          thisCell.uncover()
+          if (thisCell.display === '') {
+            this.clearSurround([rowNum, cellNum])
+          }
+        }
+      })
+    },
+    flagUpdate(number) {
+      const amount = number * -1;
+      this.$emit('updateCount', amount)
+    },
+    updateStatus(newStatus) {
+      this.$emit('updateStatus', newStatus)
     }
+  },
+  data(props) {
+
   },
   setup(props) {
 
@@ -115,28 +139,6 @@ export default {
 
     return {
       cellMatrix, cells, getSurroundCells
-    }
-  },
-  methods: {
-    clearSurround(coords) {
-      const rowNum = coords[0]
-      const cellNum = coords[1]
-      const surrCells = this.getSurroundCells(rowNum, cellNum)
-      surrCells.forEach((coors) => {
-        const rowNum = coors[0]
-        const cellNum = coors[1]
-        const thisCell = this.cells[rowNum + '-' + cellNum]
-        if (thisCell.className === 'covered') {
-          thisCell.uncover()
-          if (thisCell.display === '') {
-            this.clearSurround([rowNum, cellNum])
-          }
-        }
-      })
-    },
-    updateStatus() {
-      this.gameStatus = 'STARTED'
-      this.$emit('gameStarted')
     }
   }
 }
